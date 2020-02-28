@@ -49,7 +49,7 @@ with Path("bot/resources/elements.json").open(encoding="utf-8") as elements_file
     # Discord has a hard limit of 50 channels per category.
     # Easiest way to prevent more channels from being created is to limit the names available.
     # Therefore, the file only has the first 50 elements.
-    ELEMENTS = json.load(elements_file)
+    ELEMENTS_POS: t.Dict[str, int] = json.load(elements_file)
 
 
 class ChannelTimeout(t.NamedTuple):
@@ -161,7 +161,7 @@ class HelpChannels(Scheduler, commands.Cog):
         used_names = self.get_used_names()
 
         log.trace("Determining the available names.")
-        available_names = (name for name in ELEMENTS if name not in used_names)
+        available_names = (name for name in ELEMENTS_POS if name not in used_names)
 
         log.trace("Populating the name queue with names.")
         return deque(available_names)
